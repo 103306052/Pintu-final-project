@@ -1,0 +1,22 @@
+.logo{
+	position: absolute;
+	margin-top: 17em;
+}
+.marketing{
+	position: absolute;
+	left: 3em;
+}
+.district{
+	position: absolute;
+	left: 2em;
+	margin-top: 12em;
+}
+.branchstorage{
+	position: absolute;
+	margin-top: 29em;
+}
+.companystorage{
+	position: absolute;
+	margin-top: 40em;
+	left: 0em;
+}
