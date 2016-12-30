@@ -1,6 +1,7 @@
 .logo{
 	position: absolute;
-	margin-top: 17em;
+	margin-top: 13em;
+	left: 2em;
 }
 .marketing{
 	position: absolute;
@@ -9,14 +10,14 @@
 .district{
 	position: absolute;
 	left: 2em;
-	margin-top: 12em;
+	margin-top: 7em;
 }
 .branchstorage{
 	position: absolute;
-	margin-top: 29em;
+	margin-top: 22em;
 }
 .companystorage{
 	position: absolute;
-	margin-top: 40em;
-	left: 0em;
+	margin-top: 33em;
+	left: 2em;
 }
