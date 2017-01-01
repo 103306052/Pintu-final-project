@@ -1,106 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "103306018";
-    $dbname = "pintu";
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+<body>
+  <?php
+  error_reporting(~E_DEPRECATED & ~E_NOTICE);
+  define('DBHOST', 'localhost');
+  define('DBUSER', 'root');
+  define('DBPASS', '103306018');
+  define('DBNAME', 'pintu');
+  $conn = mysql_connect(DBHOST, DBUSER, DBPASS);
+  $dbcon = mysql_select_db(DBNAME);
+  if (!$conn) {
+    die("Connection failed : " . mysql_error());
+  }
+  if (!$dbcon) {
+    die("Database Connection failed : " . mysql_error());
+  }
 
-    $con = mysqli_connect($servername, $username, $password, $dbname);
-    if (!$con) {
-        die("Connection failed: " . mysqli_connect_error());
+  mysql_set_charset('utf8', $conn);
+
+  function printTable($sql){
+    $result = mysql_query($sql);
+    echo "<table>";       
+    while ($row = mysql_fetch_array($result)){
+      echo "<tr>";
+      echo "<td>" . $row['customer_name'] . "</td>";
+      echo "<td>" . $row['customer_email'] . "</td>";
+      echo "<td>" . $row['customer_phone'] . "</td>";
+      echo "</tr>";
     }
+    echo "</table><br>";   
+  }
 
-    mysqli_set_charset($con, 'utf8');
+  echo "最有價值<br>";
+  $sql1 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R>(SELECT AVG(R) FROM customers) and
+  F>(SELECT AVG(F) FROM customers) and 
+  M>(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql1);        
 
-    function printTable($con, $sql){
-        $result = mysqli_query($con, $sql);
-        echo "<table>
-        <tr>
-        <th>姓名</th>
-        <th>信箱</th>
-        <th>電話</th>
-        </tr>";
-        
-        while ($row = mysqli_fetch_assoc($result)){
-          echo "<tr>";
-          echo "<td>" . $row['customer_name'] . "</td>";
-          echo "<td>" . $row['customer_email'] . "</td>";
-          echo "<td>" . $row['customer_phone'] . "</td>";
-          echo "</tr>";
-        }
-        echo "</table><br>";   
-    }
+  echo "重要發展<br>";
+  $sql2 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R<(SELECT AVG(R) FROM customers) and
+  F>(SELECT AVG(F) FROM customers) and 
+  M>(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql2);
 
-    echo "Rank1:最有價值<br>";
-    $sql1 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R>(SELECT AVG(R) FROM customers) and
-                  F>(SELECT AVG(F) FROM customers) and 
-                  M>(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql1);        
+  echo "重要保持<br>";
+  $sql3 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R>(SELECT AVG(R) FROM customers) and
+  F>(SELECT AVG(F) FROM customers) and 
+  M<(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql3);
 
-    echo "Rank2:重要發展<br>";
-    $sql2 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R<(SELECT AVG(R) FROM customers) and
-                  F>(SELECT AVG(F) FROM customers) and 
-                  M>(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql2);
-            
-    echo "Rank3:重要保持<br>";
-    $sql3 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R>(SELECT AVG(R) FROM customers) and
-                  F>(SELECT AVG(F) FROM customers) and 
-                  M<(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql3);
-            
-    echo "Rank4:重要挽留<br>";
-    $sql4 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R<(SELECT AVG(R) FROM customers) and
-                  F>(SELECT AVG(F) FROM customers) and 
-                  M<(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql4);
-           
-    echo "Rank5:一般價值<br>";
-    $sql5 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R>(SELECT AVG(R) FROM customers) and
-                  F<(SELECT AVG(F) FROM customers) and 
-                  M>(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql5);
-            
-    echo "Rank6:一般發展<br>";
-    $sql6 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R<(SELECT AVG(R) FROM customers) and
-                  F<(SELECT AVG(F) FROM customers) and 
-                  M>(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql6);
+  echo "重要挽留<br>";
+  $sql4 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R<(SELECT AVG(R) FROM customers) and
+  F>(SELECT AVG(F) FROM customers) and 
+  M<(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql4);
 
-    echo "Rank7:一般保持<br>";
-    $sql7 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R>(SELECT AVG(R) FROM customers) and
-                  F<(SELECT AVG(F) FROM customers) and 
-                  M<(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql7);
-            
-    echo "Rank8:一般挽留<br>";
-    $sql8 = "SELECT customer_name,customer_email,customer_phone FROM customers
-            WHERE R<(SELECT AVG(R) FROM customers) and
-                  F<(SELECT AVG(F) FROM customers) and 
-                  M<(SELECT AVG(M) FROM customers)
-            ORDER BY R+F*50+M*25 DESC";
-    printTable($con, $sql8);
+  echo "一般價值<br>";
+  $sql5 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R>(SELECT AVG(R) FROM customers) and
+  F<(SELECT AVG(F) FROM customers) and 
+  M>(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql5);
 
-    ?>
-  </body>
+  echo "一般發展<br>";
+  $sql6 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R<(SELECT AVG(R) FROM customers) and
+  F<(SELECT AVG(F) FROM customers) and 
+  M>(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql6);
+
+  echo "一般保持<br>";
+  $sql7 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R>(SELECT AVG(R) FROM customers) and
+  F<(SELECT AVG(F) FROM customers) and 
+  M<(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql7);
+
+  echo "一般挽留<br>";
+  $sql8 = "SELECT customer_name,customer_email,customer_phone FROM customers
+  WHERE R<(SELECT AVG(R) FROM customers) and
+  F<(SELECT AVG(F) FROM customers) and 
+  M<(SELECT AVG(M) FROM customers)
+  ORDER BY R+F*50+M*25 DESC";
+  printTable($sql8);
+  ?>
+</body>
 </html>
