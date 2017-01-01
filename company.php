@@ -8,12 +8,13 @@
     <?php
     require "db.php";
 
-    $sql = "SELECT inventory, name, EOQ, EPQ FROM company, products
+    $sql = "SELECT product_id, inventory, name, EOQ, EPQ FROM company, products
             WHERE product_id = id";
     $result = mysql_query($sql) ;
 
     echo "<table>";
     echo "<tr>
+            <th>商品編號</th>
             <th>商品名稱</th>
             <th>剩餘存貨</th> 
             <th>訂購參考值</th>
@@ -21,6 +22,7 @@
         
     while ($row = mysql_fetch_array($result)){
       echo "<tr>";
+      echo "<td>" . $row['product_id'] . "</td>";
       echo "<td>" . $row['name'] . "</td>";
 
       if($row['EOQ'] == true){
