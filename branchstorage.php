@@ -6,8 +6,8 @@
   </head>
   <body>
     <form action="branchstorage.php" method="post" id="shop">
-      輸入分店id：<input type="int" name="shop_id" value="0" />
-      <input type="submit">
+      輸入分店ID：<input type="int" name="shop_id" value="" />
+      <input type="submit" value="登入">
     </form>
     <?php
       error_reporting(~E_DEPRECATED & ~E_NOTICE);
@@ -28,7 +28,8 @@
           die("Database Connection failed : " . mysql_error());
       }
       //以上為資料庫連結部分
-     $sql = "select * from shop where id =".$_POST["shop_id"];
+     $id = $_POST["shop_id"];
+     $sql = "select * from shop where id =".$id;
      //查詢整個表單
      $result = mysql_query($sql);
      while ($row = @mysql_fetch_array($result)) {
@@ -38,14 +39,14 @@
          echo "剩餘存貨：".$row['products_Q']."&nbsp"."&nbsp"."&nbsp"."&nbsp";
          //顯示商店存貨資料
           ?>
-         <form action='branchstorage.php' method = 'post'>
            <input type="submit" name="inventory_update" value="進貨">
-         </form>
+
          <?php
-            if (isset($_POST['inventory_update'])) {
-                $increase = "update shop set products_Q  = products_Q + products_distributed_Q where id =".$_POST["shop_id"];
-                mysql_query($increase);
-            }
+            $id = $_POST["shop_id"];
+         if (isset($_POST['inventory_update'])) {
+             $increase = "update shop set products_Q  = products_Q + products_distributed_Q where id =".$id;
+             mysql_query($increase);
+         }
      }
      //進貨功能（目前無效）
     ?>
