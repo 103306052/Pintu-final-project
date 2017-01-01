@@ -38,17 +38,22 @@
          echo "產品名稱：".$row['products_name']."&nbsp"."&nbsp"."&nbsp"."&nbsp";
          echo "剩餘存貨：".$row['products_Q']."&nbsp"."&nbsp"."&nbsp"."&nbsp";
          //顯示商店存貨資料
-          ?>
-           <input type="submit" name="inventory_update" value="進貨">
 
-         <?php
-            $id = $_POST["shop_id"];
-         if (isset($_POST['inventory_update'])) {
-             $increase = "update shop set products_Q  = products_Q + products_distributed_Q where id =".$id;
-             mysql_query($increase);
-         }
-     }
-     //進貨功能（目前無效）
-    ?>
+
+          ?>
+          <td class="contact-update">
+            <form action='update.php?id="<?php echo $id; ?>"' method="post">
+              <input type="hidden" name="id" value="<?php echo $id; ?>">
+              <input type="submit" name="submit" value="進貨">
+              <Input Type="Button" Value="重新整理" onClick="window.location.reload();">
+            </form>
+          </td>
+          <?php
+
+     } ?>
+
+
+
+
   </body>
 </html>
