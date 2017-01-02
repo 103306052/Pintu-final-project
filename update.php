@@ -18,7 +18,7 @@ if (!$dbcon) {
     die("Database Connection failed : " . mysql_error());
 }
 //以上為資料庫連結部分
-$query = "update shop set products_Q  = products_Q + products_distributed_Q where id ={$_POST['id']}";
+$query = "update shop set products_Q  = products_Q + ROUND(products_distributed_Q*0.1) where id ={$_POST['id']}";
 mysql_query($query);
 ?>
 <script>
