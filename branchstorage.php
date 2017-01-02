@@ -42,7 +42,7 @@
 
       $conn = mysql_connect(DBHOST, DBUSER, DBPASS);
       $dbcon = mysql_select_db(DBNAME);
-
+      mysql_set_charset('utf8', $conn);
       if (!$conn) {
           die("Connection failed : " . mysql_error());
       }
@@ -70,14 +70,19 @@
             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
               <h4><?php echo  $row['products_Q'] ?></h4>
             </div>
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-              <form action='update.php?id="<?php echo $id; ?>"' method="post">
-                <input type="hidden" name="id" value="<?php echo $id; ?>">
-                <input type="submit" name="submit" value="進貨" class="btn btn-default">
-              </form>
+            <div class="container">
+              <div class="row">
+                <form action='update_branchstorage.php?id="<?php echo $id; ?>"' method="post">
+                  <input type="hidden" name="id" value="<?php echo $id; ?>">
+                  <input type="submit" name="submit" value="進貨" class="btn btn-default">
+                  <input type="button" value="重新整理" onClick="window.location.reload();" class="btn btn-default">
+                </form>
+              </div>
             </div>
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-              <input type="button" value="重新整理" onClick="window.location.reload();" class="btn btn-default">
+          </div>
+          <div class="container">
+            <div class="row">
+              <h1 align="center" ><?php echo $row['name'] ?></h1>
             </div>
           </div>
           <?php
