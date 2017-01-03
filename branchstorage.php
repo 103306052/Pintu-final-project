@@ -33,23 +33,7 @@
 		</div>
 
     <?php
-      error_reporting(~E_DEPRECATED & ~E_NOTICE);
-
-      define('DBHOST', 'localhost');
-      define('DBUSER', 'root');
-      define('DBPASS', '5453489j');
-      define('DBNAME', 'pintu');
-
-      $conn = mysql_connect(DBHOST, DBUSER, DBPASS);
-      $dbcon = mysql_select_db(DBNAME);
-      mysql_set_charset('utf8', $conn);
-      if (!$conn) {
-          die("Connection failed : " . mysql_error());
-      }
-
-      if (!$dbcon) {
-          die("Database Connection failed : " . mysql_error());
-      }
+     require "db.php";
       //以上為資料庫連結部分
      $id = $_POST["shop_id"];
      $sql = "select * from shop where id =".$id;
@@ -88,9 +72,12 @@
           <?php
 
      } ?>
-
-
-
-
+     <div class="container">
+       <div class="row click">
+   			<div class="home">
+   				<a href="index.html" align="center"><h2>回首頁</h2></a>
+   			</div>
+      </div>
+    </div>
   </body>
 </html>
